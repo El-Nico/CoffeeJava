@@ -23,20 +23,62 @@ public class Menu {
             //present the options
             Scanner choice = new Scanner(System.in);
             // welcome user 
-            System.out.println("welcome to coffee shop"
-                    + "Press 1 to buy coffee"
+            System.out.println(
+                    "welcome to coffee shop\n"
+                    + "Press 1 to buy coffee\n"
                     + "Press 2 to exit ");
             // accept and process the users choice
             String userType = choice.nextLine();
             switch (userType) {
                 case "1":
                     //display the coffee menu
-                    displayMenu();
+                    displayMenu(menuItems);
                     //choose an item
-                    System.out.println("Choose an item by insert the item id");
+                    int selectedCoffee = -1;
+                    do {
+
+                        System.out.println("Choose an item by insert the item id");
+                        if (choice.hasNextInt()) {
+                            selectedCoffee = choice.nextInt();
+                            choice.nextLine();
+                            break;
+                        }
+                        System.out.println("invalid input");
+                        choice.next();
+                    } while (true);
+                    System.out.println("you chose " + menuItems.get(selectedCoffee).getItemName() + " €" + menuItems.get(selectedCoffee).getPrice());
+                    boolean paid = false;
                     //pay by card or cash
-                    //?select card type
-                    //present receipi
+                    do {
+                       // choice.hasNext();
+                        System.out.println("press 1 to pay by cash");
+                        System.out.println("press 2 to pay by card");
+
+                        String payMethod = choice.nextLine();
+                        switch (payMethod) {
+                            case "1":
+                                //pay by cash
+                                Transaction cash = new CashTransaction();
+                                String cashReceipt=cash.initiate(menuItems.get(selectedCoffee));
+                                menuTransactions.add(cash);
+                                //present receipt
+                                System.out.println(cashReceipt);
+                                paid = true;
+                                break;
+                            case "2":
+                                //pay by card
+                                Transaction card = new CardTransaction();
+                                String cardReceipt=card.initiate(menuItems.get(selectedCoffee));
+                                menuTransactions.add(card);
+                                //present receipt
+                                System.out.println(cardReceipt);
+                                paid = true;
+                                break;
+                            default:
+                                //wrong input
+                                System.out.println("invalid input try again");
+                        }
+                    } while (!paid);   
                     break;
                 case "2":
                     //set the transaction array in caferunner
@@ -44,10 +86,10 @@ public class Menu {
                     break;
                 default:
                     System.out.println("wrong input, please read the menu and try again");
+
                     break;
             }
         } while (!exit);
-        System.out.println("i got here");
     }
 
     //get the cafe menu from inventoryfile.txt
@@ -81,7 +123,10 @@ public class Menu {
         return menuItems;
     }
 
-    private void displayMenu() {
-        
+    private void displayMenu(ArrayList<MenuItem> menuItems) {
+        System.out.println("Item-Id\tItem-name\tPrice");
+        for (int c = 0; c < menuItems.size(); c++) {
+            System.out.println(c + "\t" + menuItems.get(c).getItemName() + "\t" + "€" + menuItems.get(c).getPrice());
+        }
     }
 }

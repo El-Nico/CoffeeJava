@@ -26,7 +26,8 @@ public class CafeRunner {
             //save all transactions on exit
             saveTransactions(getTransactions());
             //end the program
-            mainExit = false;
+            mainExit = true;
+            System.out.println("goodbye");
         } while (!mainExit);
     }
 
