@@ -1,9 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cafejava;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -11,11 +11,17 @@ package cafejava;
  */
 public class CafeJava {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO code application logic here
+        new CafeRunner(
+                //initialize and start this cafe here
+                //a menu
+                new Menu(new File(".").getCanonicalPath() + "/src/cafejava/inventory-file.txt"),
+                //inventory file url
+                new File(".").getCanonicalPath() + "/src/cafejava/inventory-file.txt",
+                //transaction file url
+                new File(".").getCanonicalPath() + "/src/cafejava/transaction-file.txt"
+        ).runCafe();
     }
-    
+
 }

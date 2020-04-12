@@ -1,14 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cafejava;
 
-/**
- *
- * @author Nicholas
- */
 public class MenuItem {
-    
+    String itemName;
+    double price;
+
+    public MenuItem(String itemName, double price) {
+        this.itemName = itemName;
+        this.price = price;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    } 
 }
