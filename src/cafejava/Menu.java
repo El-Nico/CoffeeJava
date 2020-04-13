@@ -2,31 +2,34 @@ package cafejava;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
 
-    String inventoryFileUrl;
+    private final String inventoryFileUrl;
 
     public Menu(String inventoryFileUrl) {
         this.inventoryFileUrl = inventoryFileUrl;
     }
 
-    public void start() {
+    //display a menu of items, process the transaction and return the transaction list
+    public ArrayList<Transaction> start() {
         boolean exit = false;
         //start the loop
+        //set menu array, from inventory-file
+        ArrayList<MenuItem> menuItems = getItemsFromFile(inventoryFileUrl);
+        //all transactions will be stored to this array
+        ArrayList<Transaction> menuTransactions = new ArrayList<>();
         do {
-            //initialize temporary transaction array, inventory from file
-            ArrayList<MenuItem> menuItems = getItemsFromFile(inventoryFileUrl);
-            ArrayList<Transaction> menuTransactions = new ArrayList<>();
             //present the options
             Scanner choice = new Scanner(System.in);
             // welcome user 
             System.out.println(
-                    "welcome to coffee shop\n"
-                    + "Press 1 to buy coffee\n"
-                    + "Press 2 to exit ");
+                    "Press 1 to buy coffee\n"
+                    + "Press 2 to exit "
+            );
             // accept and process the users choice
             String userType = choice.nextLine();
             switch (userType) {
@@ -50,7 +53,7 @@ public class Menu {
                     boolean paid = false;
                     //pay by card or cash
                     do {
-                       // choice.hasNext();
+                        // choice.hasNext();
                         System.out.println("press 1 to pay by cash");
                         System.out.println("press 2 to pay by card");
 
@@ -59,7 +62,7 @@ public class Menu {
                             case "1":
                                 //pay by cash
                                 Transaction cash = new CashTransaction();
-                                String cashReceipt=cash.initiate(menuItems.get(selectedCoffee));
+                                String cashReceipt = cash.initiate(menuItems.get(selectedCoffee));
                                 menuTransactions.add(cash);
                                 //present receipt
                                 System.out.println(cashReceipt);
@@ -68,7 +71,7 @@ public class Menu {
                             case "2":
                                 //pay by card
                                 Transaction card = new CardTransaction();
-                                String cardReceipt=card.initiate(menuItems.get(selectedCoffee));
+                                String cardReceipt = card.initiate(menuItems.get(selectedCoffee));
                                 menuTransactions.add(card);
                                 //present receipt
                                 System.out.println(cardReceipt);
@@ -78,24 +81,24 @@ public class Menu {
                                 //wrong input
                                 System.out.println("invalid input try again");
                         }
-                    } while (!paid);   
+                    } while (!paid);
                     break;
                 case "2":
-                    //set the transaction array in caferunner
+                    //end the loop
                     exit = true;
                     break;
                 default:
                     System.out.println("wrong input, please read the menu and try again");
-
                     break;
             }
         } while (!exit);
+        return menuTransactions;
     }
 
     //get the cafe menu from inventoryfile.txt
     private ArrayList<MenuItem> getItemsFromFile(String inventoryFileUrl) {
         ArrayList<MenuItem> menuItems = null;
-        //read file
+        //read inventory-file.txt
         try {
             FileReader reader = new FileReader(inventoryFileUrl);
             BufferedReader bufferedReader = new BufferedReader(reader);
@@ -105,8 +108,9 @@ public class Menu {
             while ((line = bufferedReader.readLine()) != null) {
                 fileContent += line;
             }
-            //extract cafe name and price as string of words
+            
             fileContent = fileContent.replaceAll("null", "  ").trim();
+            ///extract cafe name and price as string of words split by space character
             String[] words = fileContent.split("\\s+");
 
             //convert words array to array of menuitems
@@ -116,13 +120,13 @@ public class Menu {
             }
             reader.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException | NumberFormatException e) {
         }
         //return menu items
         return menuItems;
     }
 
+    //show the coffee menu
     private void displayMenu(ArrayList<MenuItem> menuItems) {
         System.out.println("Item-Id\tItem-name\tPrice");
         for (int c = 0; c < menuItems.size(); c++) {

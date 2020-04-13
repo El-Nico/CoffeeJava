@@ -1,9 +1,10 @@
 
 package cafejava;
 
+//the class defines a menu Item
 public class MenuItem {
-    String itemName;
-    double price;
+    private String itemName;
+    private double price;
 
     public MenuItem(String itemName, double price) {
         this.itemName = itemName;

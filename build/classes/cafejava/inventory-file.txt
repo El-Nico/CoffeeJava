@@ -7,4 +7,3 @@ Espresso	4.3
 Macchiato	5.0 
 Vanilla         2.5 
 Hot-Chocolate	3.0 
-

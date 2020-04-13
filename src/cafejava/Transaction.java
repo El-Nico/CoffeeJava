@@ -1,10 +1,13 @@
 package cafejava;
 
+import java.time.LocalDateTime;
 
+//super class helps to set details and process a transaction
 public class Transaction {
+
     String dateTime;
     String itemName;
-    String itemPrice;
+    double itemPrice;
 
     public String getDateTime() {
         return dateTime;
@@ -14,7 +17,7 @@ public class Transaction {
         return itemName;
     }
 
-    public String getItemPrice() {
+    public double getItemPrice() {
         return itemPrice;
     }
 
@@ -26,12 +29,23 @@ public class Transaction {
         this.itemName = itemName;
     }
 
-    public void setItemPrice(String itemPrice) {
+    public void setItemPrice(double itemPrice) {
         this.itemPrice = itemPrice;
     }
-    
-    
-    public String initiate(MenuItem menuItem){
-        return "initializing transaction for "+ menuItem.getItemName() + " €" + menuItem.getPrice()+"...";
+
+    public String initiate(MenuItem menuItem) {
+        //set the time of transaction
+        setDateTime(LocalDateTime.now().toString());
+        //set the purchased item
+        setItemName(menuItem.getItemName());
+        //set the price
+        setItemPrice(menuItem.getPrice());
+        return "initializing transaction for " + menuItem.getItemName() + " €" + menuItem.getPrice() + "...";
+    }
+
+    //return the details of this object for easy log to transaction-file.txt
+    @Override
+    public String toString() {
+        return "DateTime:" + getDateTime() + "\t" + "ItemPurchased:" + getItemName() + "\t" + "ItemPrice:" + getItemPrice();
     }
 }

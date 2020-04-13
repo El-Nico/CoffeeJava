@@ -1,1 +1,0 @@
-when all constructors are defined and all procedures are commented, that will be next commit basic or idea orx
